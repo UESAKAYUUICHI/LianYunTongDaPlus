@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: LianYunTongDaPlus
+  #sql?????
+  datasource:
+    url: jdbc:mysql://localhost:3366/lianyuntongdaplus?serverTimezone=UTC
+    username: root
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#????10721
+server:
+  port: 10721
+
+# sa-token:
+#   token-name: satoken
+#   timeout: 2592000
+#   active-timeout: -1
+#   is-concurrent: true
+#   is-share: false
+#   token-style: uuid
+#   is-log: true
+#
+#logging:
+#  level:
+#    org.apache.catalina.connector.ClientAbortException: ERROR
+#    org.apache.catalina.connector.OutputBuffer: ERROR
