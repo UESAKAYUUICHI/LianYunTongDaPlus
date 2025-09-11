@@ -3,10 +3,12 @@ package main.lianyuntongdaplus.module.basicdata.form;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @Author UESAKA
- * @Description null
- * @time 2025.7.29
+ * @Description 货物分类表单
+ * @time 2025.8.12
  */
 @Data
 public class GoodsCategoryForm {
@@ -18,5 +20,9 @@ public class GoodsCategoryForm {
     private Integer categoryCode;
 
     private String categoryType;
+
+    private Date createTime;
+
+    private Date updateTime;
 
 }

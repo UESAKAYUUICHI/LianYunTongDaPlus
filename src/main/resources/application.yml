@@ -20,7 +20,9 @@ server:
 #   token-style: uuid
 #   is-log: true
 #
-#logging:
-#  level:
-#    org.apache.catalina.connector.ClientAbortException: ERROR
-#    org.apache.catalina.connector.OutputBuffer: ERROR
+
+
+# watch sql log
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
