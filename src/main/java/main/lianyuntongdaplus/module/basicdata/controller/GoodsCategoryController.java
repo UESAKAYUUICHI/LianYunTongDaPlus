@@ -10,6 +10,8 @@ import main.lianyuntongdaplus.module.basicdata.service.GoodsCategoryService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author UESAKA
  * @Description 货物分类控制器
@@ -24,15 +26,23 @@ public class GoodsCategoryController {
     private GoodsCategoryService goodsCategoryService;
 
     /**
-     * 测试方法
+     * 查询大模块，根据categoryId,categoryType,categoryParentType来查询
+     * @param goodsCategoryForm 包含查询条件的表单对象
+     * categoryId: 分类ID 精确查询
+     * categoryType: 分类类型 模糊查询
+     * categoryParentType: 父分类类型 模糊查询
+     * @return 包含查询结果的 MyResult 对象
      * */
-    @GetMapping("/select")
-    public MyResult test(@RequestParam Integer id){
-        if(goodsCategoryService.selectById(id) == null){
-            return MyResult.result(null,"商品分类不存在",MyResult.FAIL_CODE);
-        }else{
-            return MyResult.result(goodsCategoryService.selectById(id),MyResult.SUCCESS_MESSAGE,MyResult.SUCCESS_CODE);
+
+    //目前希望改进的方向为分页查询
+
+    @PostMapping("/select")
+    public MyResult select(@RequestBody GoodsCategoryForm goodsCategoryForm){
+        List<GoodsCategoryDO> goodsCategoryList = goodsCategoryService.select(goodsCategoryForm);
+        if(goodsCategoryList!=null){
+            return MyResult.result(goodsCategoryList,MyResult.SUCCESS_MESSAGE,MyResult.SUCCESS_CODE);
         }
+        return MyResult.result("列表为空或查询错误",MyResult.FAIL_MESSAGE,MyResult.FAIL_CODE);
     }
 
     /**
@@ -62,24 +72,16 @@ public class GoodsCategoryController {
         }catch(Exception e){
             return MyResult.result("货物分类删除失败",MyResult.FAIL_MESSAGE,MyResult.FAIL_CODE);
         }
-
-    }
-
-    /**
-     * 分页查询
-     * */
-    @PostMapping("/pageGoodsCategory")
-    public MyResult page(){
-        return MyResult.result();
     }
 
     /**
      * 更新
      * */
+
     @PostMapping("/updateGoodsCategory")
     public MyResult update(@RequestBody GoodsCategoryForm goodsCategoryForm){
         try{
-            Integer id = goodsCategoryForm.getId();
+            Integer id = goodsCategoryForm.getCategoryId();
             //设置非空判断标识符
             GoodsCategoryDO existingCategory;
 

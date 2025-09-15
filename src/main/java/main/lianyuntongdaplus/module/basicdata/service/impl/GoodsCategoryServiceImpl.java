@@ -11,6 +11,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 /**
  * @Author UESAKA
  * @Description 货物分类服务实现类
@@ -21,6 +23,41 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
     @Resource
     private GoodsCategoryMapper goodsCategoryMapper;
+
+    /**
+     * 查询大模块
+     * @return 货物分类列表或单个对象
+     * */
+    @Override
+    public List<GoodsCategoryDO> select(GoodsCategoryForm goodsCategoryForm) {
+        // 优先根据ID查询
+        if (goodsCategoryForm.getCategoryId() != null) {
+            return goodsCategoryMapper.getGoodsCategoryById(goodsCategoryForm.getCategoryId());
+        }
+
+        //这里避免后面变量重复调用先提前提出来
+        String categoryType = goodsCategoryForm.getCategoryType();
+        String categoryParentType = goodsCategoryForm.getCategoryParentType();
+
+        // 同时存在类型和父类型
+        if (categoryType != null && categoryParentType != null) {
+            return goodsCategoryMapper.getGoodsCategoryByNameAndParentName(categoryType, categoryParentType);
+        }
+        // 只有类型
+        else if (categoryType != null) {
+            return goodsCategoryMapper.getGoodsCategoryByName(categoryType);
+        }
+        // 只有父类型
+        else if (categoryParentType != null) {
+            return goodsCategoryMapper.getGoodsCategoryByParentName(categoryParentType);
+        }
+        // 都不存在则查询所有
+        else {
+            return goodsCategoryMapper.getAllGoodsCategory();
+        }
+    }
+
+
 
     @Override
     public GoodsCategoryDO selectById(Integer id) {
@@ -38,7 +75,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     @Override
     public void insertGoodsCategory(@RequestBody GoodsCategoryForm form) {
         // 从表单对象中提取参数
-        goodsCategoryMapper.insertGoodsCategory(form.getCategoryName(),form.getCategoryCode(),form.getCategoryType());
+        goodsCategoryMapper.insertGoodsCategory(form.getCategoryType(),form.getCategoryParentType());
     }
 
     /**
@@ -56,9 +93,10 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      * */
     @Override
     public void updateGoodsCategory(@RequestBody GoodsCategoryForm form) {
-        GoodsCategory goodsCategory = new GoodsCategory();
-        BeanUtils.copyProperties(form,goodsCategory);
-        goodsCategoryMapper.updateById(goodsCategory);
+        Integer categoryId = form.getCategoryId();
+        String categoryType = form.getCategoryType();
+        String categoryParentType = form.getCategoryParentType();
+        goodsCategoryMapper.updateGoodsCategory(categoryId,categoryType,categoryParentType);
     }
 
 }

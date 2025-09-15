@@ -5,6 +5,8 @@ import main.lianyuntongdaplus.module.basicdata.domain.GoodsCategory;
 import main.lianyuntongdaplus.module.basicdata.form.GoodsCategoryForm;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 /**
  * @Author UESAKA
  * @Description 货物分类服务接口
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface GoodsCategoryService {
     GoodsCategoryDO selectById(Integer id);
 
-    void insertGoodsCategory(@RequestBody GoodsCategoryForm goodsCategoryForm);
+    List<GoodsCategoryDO> select(GoodsCategoryForm goodsCategoryForm);
+
+    void insertGoodsCategory(GoodsCategoryForm goodsCategoryForm);
 
     void deleteGoodsCategory(Integer categoryId);
 
-    void updateGoodsCategory(@RequestBody GoodsCategoryForm form);
+    void updateGoodsCategory(GoodsCategoryForm form);
 }

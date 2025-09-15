@@ -13,16 +13,28 @@ import java.util.Date;
 @Data
 public class GoodsCategoryForm {
 
-    private Integer id;
+    private Integer categoryId;
 
-    private String categoryName;
-
-    private Integer categoryCode;
-
+    /**
+     * 分类名称
+     */
     private String categoryType;
 
+    /**
+     * 父分类名称
+     */
+    private String categoryParentType;
+
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
+    /**
+     * 更新时间
+     */
     private Date updateTime;
+
+
 
 }

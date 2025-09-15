@@ -27,20 +27,14 @@ public class GoodsCategory implements Serializable {
     /**
      * 分类名称
      */
-    @TableField(value = "category_name")
-    private String categoryName;
-
-    /**
-     * 分类编码
-     */
-    @TableField(value = "category_code")
-    private Integer categoryCode;
-
-    /**
-     * 分类类型
-     */
     @TableField(value = "category_type")
     private String categoryType;
+
+    /**
+     * 父分类名称
+     */
+    @TableField(value = "category_parent_type")
+    private String categoryParentType;
 
     /**
      * 创建时间
@@ -53,6 +47,5 @@ public class GoodsCategory implements Serializable {
      */
     @TableField(value = "update_time")
     private Date updateTime;
-
 
 }

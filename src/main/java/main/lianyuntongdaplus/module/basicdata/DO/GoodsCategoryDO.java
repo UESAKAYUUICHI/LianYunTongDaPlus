@@ -16,25 +16,18 @@ import java.util.Date;
 
 @Data
 public class GoodsCategoryDO {
-    /**
-     * 分类ID
-     */
-    private Integer id;
+
+    private Integer categoryId;
 
     /**
      * 分类名称
      */
-    private String categoryName;
-
-    /**
-     * 分类编码
-     */
-    private Integer categoryCode;
-
-    /**
-     * 分类类型
-     */
     private String categoryType;
+
+    /**
+     * 父分类名称
+     */
+    private String categoryParentType;
 
     /**
      * 创建时间
