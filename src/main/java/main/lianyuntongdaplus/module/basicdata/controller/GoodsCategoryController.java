@@ -3,6 +3,7 @@ package main.lianyuntongdaplus.module.basicdata.controller;
 
 import jakarta.annotation.Resource;
 import main.lianyuntongdaplus.common.utils.result.MyResult;
+import main.lianyuntongdaplus.common.utils.result.Result;
 import main.lianyuntongdaplus.module.basicdata.DO.GoodsCategoryDO;
 import main.lianyuntongdaplus.module.basicdata.form.GoodsCategoryForm;
 import main.lianyuntongdaplus.module.basicdata.service.GoodsCategoryService;
@@ -10,6 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static main.lianyuntongdaplus.common.utils.result.ResultCode.PARAM_IS_INVALID;
+import static main.lianyuntongdaplus.common.utils.result.ResultCode.SYSTEM_ERROR;
 
 /**
  * @Author UESAKA
@@ -33,15 +37,14 @@ public class GoodsCategoryController {
      * @return 包含查询结果的 MyResult 对象
      * */
 
-    //目前希望改进的方向为分页查询
-
+    //已实现分页查询(丐版，等待重构)
     @PostMapping("/select")
-    public MyResult select(@RequestBody GoodsCategoryForm goodsCategoryForm){
+    public Result select(@RequestBody GoodsCategoryForm goodsCategoryForm){
         List<GoodsCategoryDO> goodsCategoryList = goodsCategoryService.select(goodsCategoryForm);
         if(goodsCategoryList!=null){
-            return MyResult.result(goodsCategoryList,MyResult.SUCCESS_MESSAGE,MyResult.SUCCESS_CODE);
+            return Result.success(goodsCategoryList);
         }
-        return MyResult.result("列表为空或查询错误",MyResult.FAIL_MESSAGE,MyResult.FAIL_CODE);
+        return Result.failure(PARAM_IS_INVALID.code(),PARAM_IS_INVALID.message());
     }
 
     /**
@@ -49,13 +52,13 @@ public class GoodsCategoryController {
      * */
 
      @PostMapping("/add")
-     public MyResult addGoodsCategory(@RequestBody GoodsCategoryForm goodsCategoryForm) {
+     public Result addGoodsCategory(@RequestBody GoodsCategoryForm goodsCategoryForm) {
          try {
              //此处不用判空，实体类拦截掉了
              goodsCategoryService.insertGoodsCategory(goodsCategoryForm);
-             return MyResult.result("货物分类添加成功",MyResult.SUCCESS_MESSAGE,MyResult.SUCCESS_CODE);
+             return Result.success("数据添加成功!");
          } catch (Exception e) {
-             return MyResult.result("货物分类添加失败",MyResult.FAIL_MESSAGE,MyResult.FAIL_CODE);
+             return Result.failure(SYSTEM_ERROR.code(), SYSTEM_ERROR.message());
          }
      }
 
@@ -64,12 +67,12 @@ public class GoodsCategoryController {
      * 删除
      * */
     @PostMapping("/delete")
-    public MyResult deleteGoodsCategory(@RequestParam Integer categoryId){
+    public Result deleteGoodsCategory(@RequestParam Integer categoryId){
         try{
             goodsCategoryService.deleteGoodsCategory(categoryId);
-            return MyResult.result("货物分类删除成功",MyResult.SUCCESS_MESSAGE,MyResult.SUCCESS_CODE);
+            return Result.success("数据删除成功!");
         }catch(Exception e){
-            return MyResult.result("货物分类删除失败",MyResult.FAIL_MESSAGE,MyResult.FAIL_CODE);
+            return Result.failure(SYSTEM_ERROR.code(), SYSTEM_ERROR.message());
         }
     }
 
@@ -78,7 +81,7 @@ public class GoodsCategoryController {
      * */
 
     @PostMapping("/updateGoodsCategory")
-    public MyResult update(@RequestBody GoodsCategoryForm goodsCategoryForm){
+    public Result update(@RequestBody GoodsCategoryForm goodsCategoryForm){
         try{
             Integer id = goodsCategoryForm.getCategoryId();
             //设置非空判断标识符
@@ -94,12 +97,12 @@ public class GoodsCategoryController {
             if(existingCategory == null){
                 //可选择不存在的数据是否插入
                 //goodsCategoryService.insertGoodsCategory(goodsCategoryForm);
-                return MyResult.result(null,"商品分类不存在，无法修改！",MyResult.FAIL_CODE);
+                return Result.failure(SYSTEM_ERROR.code(), SYSTEM_ERROR.message());
             }
             goodsCategoryService.updateGoodsCategory(goodsCategoryForm);
-            return MyResult.result(goodsCategoryForm,"商品分类更新成功！",MyResult.SUCCESS_CODE);
+            return Result.success("数据更新成功!");
         }catch(Exception e){
-            return MyResult.result(null,"未知错误,请联系管理员！",MyResult.FAIL_CODE);
+            return Result.failure(SYSTEM_ERROR.code(), SYSTEM_ERROR.message());
         }
     }
 }
