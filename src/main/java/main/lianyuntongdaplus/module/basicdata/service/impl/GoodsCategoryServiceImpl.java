@@ -7,6 +7,7 @@ import main.lianyuntongdaplus.module.basicdata.domain.GoodsCategory;
 import main.lianyuntongdaplus.module.basicdata.form.GoodsCategoryForm;
 import main.lianyuntongdaplus.module.basicdata.mapper.GoodsCategoryMapper;
 import main.lianyuntongdaplus.module.basicdata.service.GoodsCategoryService;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,17 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      * */
     @Override
     public List<GoodsCategoryDO> select(GoodsCategoryForm goodsCategoryForm) {
+
+        //提取分页参数
+        int pageNum = goodsCategoryForm.getPageNum();
+        int pageSize = goodsCategoryForm.getPageSize();
+
+        // 计算偏移量
+        int offset = (pageNum - 1) * pageSize;
+
+        // 使用 RowBounds 来设置分页参数
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
+
         // 优先根据ID查询
         if (goodsCategoryForm.getCategoryId() != null) {
             return goodsCategoryMapper.getGoodsCategoryById(goodsCategoryForm.getCategoryId());
@@ -41,19 +53,19 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
         // 同时存在类型和父类型
         if (categoryType != null && categoryParentType != null) {
-            return goodsCategoryMapper.getGoodsCategoryByNameAndParentName(categoryType, categoryParentType);
+            return goodsCategoryMapper.getGoodsCategoryByNameAndParentName(categoryType, categoryParentType,rowBounds);
         }
         // 只有类型
         else if (categoryType != null) {
-            return goodsCategoryMapper.getGoodsCategoryByName(categoryType);
+            return goodsCategoryMapper.getGoodsCategoryByName(categoryType,rowBounds);
         }
         // 只有父类型
         else if (categoryParentType != null) {
-            return goodsCategoryMapper.getGoodsCategoryByParentName(categoryParentType);
+            return goodsCategoryMapper.getGoodsCategoryByParentName(categoryParentType,rowBounds);
         }
         // 都不存在则查询所有
         else {
-            return goodsCategoryMapper.getAllGoodsCategory();
+            return goodsCategoryMapper.getAllGoodsCategory(rowBounds);
         }
     }
 

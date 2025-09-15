@@ -35,6 +35,15 @@ public class GoodsCategoryForm {
      */
     private Date updateTime;
 
+    /**
+     * 表示当前要查询的页码
+     */
+    int pageNum;
+
+    /**
+     * 表示每页显示的数据条数
+     */
+    int pageSize;
 
 
 }

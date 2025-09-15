@@ -4,7 +4,6 @@ package main.lianyuntongdaplus.module.basicdata.controller;
 import jakarta.annotation.Resource;
 import main.lianyuntongdaplus.common.utils.result.MyResult;
 import main.lianyuntongdaplus.module.basicdata.DO.GoodsCategoryDO;
-import main.lianyuntongdaplus.module.basicdata.domain.GoodsCategory;
 import main.lianyuntongdaplus.module.basicdata.form.GoodsCategoryForm;
 import main.lianyuntongdaplus.module.basicdata.service.GoodsCategoryService;
 import org.springframework.validation.annotation.Validated;
