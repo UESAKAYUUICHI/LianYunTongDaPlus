@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static main.lianyuntongdaplus.common.utils.result.ResultCode.PARAM_IS_INVALID;
-import static main.lianyuntongdaplus.common.utils.result.ResultCode.SYSTEM_ERROR;
+import static main.lianyuntongdaplus.common.utils.result.ResultCode.*;
 
 /**
  * @Author UESAKA
@@ -41,7 +40,7 @@ public class GoodsCategoryController {
     @PostMapping("/select")
     public Result select(@RequestBody GoodsCategoryForm goodsCategoryForm){
         List<GoodsCategoryDO> goodsCategoryList = goodsCategoryService.select(goodsCategoryForm);
-        if(goodsCategoryList!=null){
+        if(!goodsCategoryList.isEmpty()){
             return Result.success(goodsCategoryList);
         }
         return Result.failure(PARAM_IS_INVALID.code(),PARAM_IS_INVALID.message());
@@ -58,7 +57,7 @@ public class GoodsCategoryController {
              goodsCategoryService.insertGoodsCategory(goodsCategoryForm);
              return Result.success("数据添加成功!");
          } catch (Exception e) {
-             return Result.failure(SYSTEM_ERROR.code(), SYSTEM_ERROR.message());
+             return Result.failure(PARAM_IS_REPEATED.code(), PARAM_IS_REPEATED.message());
          }
      }
 
@@ -72,7 +71,7 @@ public class GoodsCategoryController {
             goodsCategoryService.deleteGoodsCategory(categoryId);
             return Result.success("数据删除成功!");
         }catch(Exception e){
-            return Result.failure(SYSTEM_ERROR.code(), SYSTEM_ERROR.message());
+            return Result.failure(PARAM_IS_INVALID.code(), PARAM_IS_INVALID.message());
         }
     }
 
@@ -83,26 +82,10 @@ public class GoodsCategoryController {
     @PostMapping("/updateGoodsCategory")
     public Result update(@RequestBody GoodsCategoryForm goodsCategoryForm){
         try{
-            Integer id = goodsCategoryForm.getCategoryId();
-            //设置非空判断标识符
-            GoodsCategoryDO existingCategory;
-
-            //因为selectById这个函数未查询到结果是error,不能使用==null判断非空
-            try{
-                existingCategory = goodsCategoryService.selectById(id);
-            }catch(Exception e){
-                existingCategory = null;
-            }
-
-            if(existingCategory == null){
-                //可选择不存在的数据是否插入
-                //goodsCategoryService.insertGoodsCategory(goodsCategoryForm);
-                return Result.failure(SYSTEM_ERROR.code(), SYSTEM_ERROR.message());
-            }
             goodsCategoryService.updateGoodsCategory(goodsCategoryForm);
             return Result.success("数据更新成功!");
         }catch(Exception e){
-            return Result.failure(SYSTEM_ERROR.code(), SYSTEM_ERROR.message());
+            return Result.failure(PARAM_IS_INVALID.code(), PARAM_IS_INVALID.message());
         }
     }
 }
